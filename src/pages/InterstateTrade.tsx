@@ -6,34 +6,31 @@ interface InterstateTradeState {
 
 type InterTrade = {
     "Destination State": string,
-    "ID Destination State": string,
-    "ID Origin": string,
-    "ID Year": number,
     "Millions Of Dollars": number,
-    "Origin": string,
     "Thousands Of Tons": number,
     "Year": string,
 }
 
 const InterstateTrade: React.FC<InterstateTradeState> = () => {
 
-    const [state, setState] = useState<InterTrade[]>([])
+    const [state, setState] = useState<InterTrade[]>([]);
+    const [searchTerm, setSearchTerm] = useState("");
 
     useEffect(() => {
         const fetchData = async () => {
             const response = await fetch('https://datausa.io/api/data?Origin%20State=04000US51&measure=Millions%20Of%20Dollars,Thousands%20Of%20Tons&drilldowns=Destination%20State&year=latest')
             const allState = await response.json()
-            console.log(allState.data);
             setState(allState.data)
         }
         fetchData()
     }, [])
     
-    console.log("all the states", state);
     return (
         <>
             <label htmlFor="state">Search for a state</label>
-            <input id='state' type="text" />
+            <input id='state' type="text" onChange={(event) => {
+                setSearchTerm(event.target.value);
+            }}/>
             <button>Clear Search</button>
 
             <div>
@@ -49,40 +46,32 @@ const InterstateTrade: React.FC<InterstateTradeState> = () => {
 
             <div>
                 <h4>State List</h4>
-                        <table>
-                        <tr>
-                            <th>Destination State</th>
-                            <th>ID Destination State</th>
-                            <th>ID Origin</th>
-                            <th>ID Year</th>
-                            <th>Millions of Dollars</th>
-                            <th>Total Tons</th>
-                            <th>Total Tons</th>
-                            <th>Total Tons</th>
-                        </tr>
-                {state.map((eachState, index) => {
-                    return (
-                        <>
-
-                            <tr>
-                                <td>{eachState['Destination State']} </td>
-                                <td>{eachState['ID Destination State']}</td>
-                                <td>{eachState['ID Origin']}</td>
-                                <td>{eachState['ID Year']}</td>
-                                <td>{eachState['Millions Of Dollars']}</td>
-                                <td>{eachState.Origin}</td>
-                                <td>{eachState['Thousands Of Tons']}</td>
-                                <td>{eachState.Year}</td>
-                            </tr>
-                           
-                        </>
-                            
-                            );
-                        })}
-                    </table>
-                <div>
-                    
-                </div>
+                <table className='tradeState'>
+                    <tr className='tradeHeader'>
+                        <th className='tradeHead'>Destination State</th>
+                        <th className='tradeHead'>Millions of Dollars</th>
+                        <th className='tradeHead'>Thousand of Tons</th>
+                        <th className='tradeHead'>Year</th>
+                    </tr>
+                    {state.filter((val) => {
+                        if(searchTerm == "") {
+                            return val
+                        } else if(val['Destination State'].toLowerCase().includes(searchTerm.toLowerCase())) {
+                            return val
+                        }
+                    }).map((eachState, index) => {
+                        return (
+                            <>
+                                <tr key={index} className='stateRow'>
+                                    <td className='tradeHead'>{eachState['Destination State']} </td>
+                                    <td className='tradeHead'>{eachState['Millions Of Dollars']}</td>
+                                    <td className='tradeHead'>{eachState['Thousands Of Tons']}</td>
+                                    <td className='tradeHead'>{eachState.Year}</td>
+                                </tr>
+                            </>
+                        );
+                    })}
+                </table>
             </div>
         </>
     )

@@ -11,3 +11,13 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.tradeState {
+  margin: auto;
+  width: -webkit-fill-available;
+}
+
+.tradeHead {
+  padding: 5px;
+  text-align: center;
+}
