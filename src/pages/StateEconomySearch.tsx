@@ -79,9 +79,7 @@ const StateEconomySearch: React.FC<InterStateEconomySearch> = () => {
                             return val
                         } else if(val.Origin?.toLowerCase().includes(searchTerm.toLowerCase())) {
                             return val
-                        } else {
-                            return val
-                        }
+                        } 
                     }).map((eachState, index) => {
                         return (
                             <>

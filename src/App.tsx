@@ -8,11 +8,17 @@ import StateEconomySearch from './pages/StateEconomySearch'
 import StateSearch from './pages/StateSearch'
 
 function App() {
+    let startRoute=<Home/>;
+    if(localStorage.getItem("isLoggedIn")===null)
+    startRoute=<Signup/>
+    if(localStorage.getItem("isLoggedIn")==="false")
+    startRoute=<Login/>
+
     return (
         <Router>
             <div className="App" style={{ margin: '1rem' }}>
                 <header className="App-header">
-                    <h1>Focus Fullstack Interview Exercise</h1>
+                <h1>Focus Fullstack Interview Exercise</h1>
                 </header>
                 <nav
                     style={{
@@ -25,11 +31,16 @@ function App() {
                     <Link to="/states">States Search Example</Link> |{' '}
                     <Link to="/trade">Interstate Trade Search</Link> |{' '}
                     <Link to="/economy">State Economy Search</Link> |{' '}
-                    <Link to="/login">Login</Link> |{' '}
-                    <Link to="/signup">Signup</Link> |{' '}
+                    {localStorage.getItem("isLoggedIn")==="false" && <Link to="/login">Login</Link>}
+                    {localStorage.getItem("isLoggedIn")==="false" && " | "}
+                    {localStorage.getItem("isLoggedIn")==="true" && <a onClick={() => {
+                        localStorage.setItem("isLoggedIn", "false")
+                        window.location.href="/"
+                    }}>Logout</a>}
+                    {localStorage.getItem("isLoggedIn")==="false" && <Link to="/signup">Signup</Link>}
                 </nav>
                 <Routes>
-                    <Route path="/" element={<Home />} />
+                    <Route path="/" element={startRoute} />
                     <Route path="/states" element={<StateSearch />} />
                     <Route path="/trade" element={<InterstateTrade />} />
                     <Route path="/economy" element={<StateEconomySearch />} />
